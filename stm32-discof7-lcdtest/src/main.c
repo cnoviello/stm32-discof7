@@ -69,8 +69,6 @@ static void CPU_CACHE_Enable(void);
   */
 int main(void)
 {
-	RCC_PeriphCLKInitTypeDef  PeriphClkInitStruct;
-
 	/* Enable the CPU Cache */
 	CPU_CACHE_Enable();
 
