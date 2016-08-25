@@ -71,37 +71,37 @@ static void MX_TIM6_Init(void);
   */
 int main(void)
 {
-	/* Enable the CPU Cache */
-	CPU_CACHE_Enable();
+  /* Enable the CPU Cache */
+  CPU_CACHE_Enable();
 
-	/* STM32F7xx HAL library initialization */
-	HAL_Init();
+  /* STM32F7xx HAL library initialization */
+  HAL_Init();
 
-	/* Configure the system clock to 216 MHz */
-	SystemClock_Config();
+  /* Configure the system clock to 216 MHz */
+  SystemClock_Config();
 
-	/* Configure TIM6 */
-	MX_TIM6_Init();
+  /* Configure TIM6 */
+  MX_TIM6_Init();
 
-	/* Configure LCD : Only one layer is used */
-	LCD_Config();
+  /* Configure LCD : Only one layer is used */
+  LCD_Config();
 
-	BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
-	BSP_LCD_SetBackColor(LCD_COLOR_WHITE);
-	BSP_LCD_DisplayStringAt(0, 0, (uint8_t*)"Press USR BTN to Fade IN!", CENTER_MODE);
-	BSP_LCD_DisplayStringAt(0, BSP_LCD_GetFont()->Height, (uint8_t*)"Leave USR BTN to Fade OUT!", CENTER_MODE);
+  BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
+  BSP_LCD_SetBackColor(LCD_COLOR_WHITE);
+  BSP_LCD_DisplayStringAt(0, 0, (uint8_t*)"Press USR BTN to Fade IN!", CENTER_MODE);
+  BSP_LCD_DisplayStringAt(0, BSP_LCD_GetFont()->Height, (uint8_t*)"Leave USR BTN to Fade OUT!", CENTER_MODE);
 
   /* Start TIM6 to compute PWM */
-	HAL_TIM_Base_Start(&htim6);
+  HAL_TIM_Base_Start(&htim6);
 
-	uint16_t T_ON = 0;
-	uint32_t fadeDelay = HAL_GetTick();
+  uint16_t T_ON = 0;
+  uint32_t fadeDelay = HAL_GetTick();
 
-	while(1) {
-	  HAL_GPIO_WritePin(LCD_BL_CTRL_GPIO_PORT, LCD_BL_CTRL_PIN, SET);
-	  while(TIM6->CNT < T_ON);
-	  HAL_GPIO_WritePin(LCD_BL_CTRL_GPIO_PORT, LCD_BL_CTRL_PIN, RESET);
-	  while(TIM6->CNT >= T_ON && TIM6->CNT < TIM6->ARR);
+  while(1) {
+    HAL_GPIO_WritePin(LCD_BL_CTRL_GPIO_PORT, LCD_BL_CTRL_PIN, SET);
+    while(TIM6->CNT < T_ON);
+    HAL_GPIO_WritePin(LCD_BL_CTRL_GPIO_PORT, LCD_BL_CTRL_PIN, RESET);
+    while(TIM6->CNT >= T_ON && TIM6->CNT < TIM6->ARR);
 
     if(HAL_GPIO_ReadPin(KEY_BUTTON_GPIO_PORT, KEY_BUTTON_PIN) == SET) {
       if(HAL_GetTick() - fadeDelay > 10L && T_ON < 999) {
@@ -115,9 +115,9 @@ int main(void)
         fadeDelay = HAL_GetTick();
       }
     }
-	}
+  }
 
-	while(1);
+  while(1);
 }
 
 /**
